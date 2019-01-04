@@ -877,37 +877,37 @@ class Api extends CI_Controller {
 			return false;
 		}
 		$user = $this->getUserByExtId($type, $data['extid']);
-		if ($data['email'] && (!$user || !$user->id)) {
-			$user = $this->getUserByEmail($data['email']);
-		}
+		// if ($data['email'] && (!$user || !$user->id)) {
+		// 	$user = $this->getUserByEmail($data['email']);
+		// }
 		if (!$user || !$user->id) {
 			//getAuthorizedUser
-			if (isset($data['email']) && $data['email']) {
-				$sql = 'SELECT * FROM `users` WHERE `email`=' . $this->db->escape($data['email']);
-				$query = $this->db->query($sql);
-				$user = $query->row();
-				if ($user) {
-					$userId = $user->id;
-					$sql = 'DELETE FROM `user_auth` WHERE
-								`user_id` = ' . (int)$userId . ' AND
-								`type` 	  = \'' . $type . '\'';
-					$this->db->query($sql);
-				}
-			}
-			if (!$user) {
-				$sql = 'INSERT INTO `users` SET
-							`first_name`=\'\',
-							`last_name`=\'\',
-							`created_at`=NOW(),
-							`updated_at`=NOW(),
-							`online_at`=NOW()
-							';
-				$this->db->query($sql);
-				$userId = $this->db->insert_id();
-			}
+			// if (isset($data['email']) && $data['email']) {
+			// 	$sql = 'SELECT * FROM `users` WHERE `email`=' . $this->db->escape($data['email']);
+			// 	$query = $this->db->query($sql);
+			// 	$user = $query->row();
+			// 	if ($user) {
+			// 		$userId = $user->id;
+			// 		$sql = 'DELETE FROM `user_auth` WHERE
+			// 					`user_id` = ' . (int)$userId . ' AND
+			// 					`type` 	  = \'' . $type . '\'';
+			// 		$this->db->query($sql);
+			// 	}
+			// }
+			// if (!$user) {
+			$sql = 'INSERT INTO `users` SET
+						`first_name`=\'\',
+						`last_name`=\'\',
+						`created_at`=NOW(),
+						`updated_at`=NOW(),
+						`online_at`=NOW()
+						';
+			$this->db->query($sql);
+			$userId = $this->db->insert_id();
+			// }
 			$sql = 'INSERT INTO `user_auth` SET
-						`user_id` = ' . (int)$userId . ',
-						`extid` = ' . (int)$data['extid'] . ',
+						`user_id` = ' . $userId . ',
+						`extid` = ' . $this->db->escape($data['extid']) . ',
 						`type` 	  = \'' . $type . '\',
 						`token`	  = ' . $this->db->escape($token);
 			$this->db->query($sql);
