@@ -8,7 +8,44 @@ class Notification_model extends CI_Model{
     );
 	public function __construct() {
         parent::__construct();
-    }
+	}
+	public function getReadyNotification () {
+		$result = $this->db
+			->select('notifications.*,user_firebase_tokens.token as device_token')
+			->from('notifications')
+			->where('notifications.status', '1')
+			->join('notification_users', 'notification_users.notification_id = notifications.id', 'left')
+			->join('user_firebase_tokens', 'user_firebase_tokens.user_id = notification_users.user_id', 'left')
+			->get()
+			->result();
+		return $result;
+	}
+	public function updateSentNotification($notifications)
+	{	
+		$map_id = function ($notification)
+		{
+			return $notification->id;
+		};
+		$ids = array_map($map_id, $notifications);
+		return $this->db
+			->where_in('id', $ids)
+			->update('notifications', ['status' => 3]);
+	}
+	public function insertRejectNotification($id)
+	{
+		$notification = [
+			'title' => 'Your vid has been rejected 🙈',
+			'content' => 'Let\'s upload a new vid 🤳📹',
+			'status' => '1',
+			'type' => '1'
+		];
+		$this->db->insert('notifications',$notification);
+		$notification_id = $this->db->insert_id();
+		$this->db->insert('notification_users', [
+			'notification_id' => $notification_id,
+			'user_id' => $id
+		]);
+	}
 	public function getTotalCount() {
         $result = $this->db->select("COUNT(id) AS 'count'")
                             ->from('notifications')
@@ -165,8 +202,12 @@ class Notification_model extends CI_Model{
 	}
 	public function insertNotification($data){
 		$res = $this->db->insert('notifications',$data);
-		return $res;
+		if ($res) {
+			return $this->db->insert_id();
+		}
+		return false;
 	}
+	
 	public function deleteData($data){
 		$this->db->where_in('id',$data);
 		$this->db->delete('notifications');

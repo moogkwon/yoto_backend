@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $root	= isset($_SERVER["HTTPS"]) ? 'https://' : 'http://';
-$root	.= $_SERVER['HTTP_HOST'];
+$root	.= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
 $root 	.= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 
 $config['base_url'] = 'http://admin.coolfriend.co';
@@ -140,7 +140,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------

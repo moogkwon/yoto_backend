@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
 class Users extends CI_Controller {
 	/**
 	 * Index Page for this controller.
@@ -25,6 +25,7 @@ class Users extends CI_Controller {
 			redirect('Login/');
 		}
 		$this->load->model('user_model');
+		$this->load->model('notification_model');
 		$this->load->model('report_model');
 		$this->load->model('call_model');
 		$this->load->library('form_validation');
@@ -219,7 +220,8 @@ $return = shell_exec($cmd); */
     }
 	public function rejectVideo($id = 0) {
         if ($id == 0)   return;
-        $this->user_model->rejectVideo($id);
+		// $this->user_model->rejectVideo($id);
+		$this->notification_model->insertRejectNotification($id);
     }
 	public function BlockedUser(){
         $data['users'] = $this->user_model->getBlockedUser();
