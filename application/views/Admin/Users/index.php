@@ -173,13 +173,15 @@ var ajax_datatable;
 })(window, document, window.jQuery);
 
 function rejectVideo(id) {
-    $.ajax({
-        url: "<?=site_url()?>Admin/Users/rejectVideo/" + id,
-        method: "POST",
-        success: function(data) {
-            ajax_datatable.fnClearTable();
-        }
-    })
+    if (confirm('Do you want to reject video?')) {
+        $.ajax({
+            url: "<?=site_url()?>Admin/Users/rejectVideo/" + id,
+            method: "POST",
+            success: function(data) {
+                ajax_datatable.fnClearTable();
+            }
+        })
+    }
 }
 
 function changeStatus(id, status) {

@@ -220,7 +220,7 @@ $return = shell_exec($cmd); */
     }
 	public function rejectVideo($id = 0) {
         if ($id == 0)   return;
-		// $this->user_model->rejectVideo($id);
+		$this->user_model->rejectVideo($id);
 		$this->notification_model->insertRejectNotification($id);
     }
 	public function BlockedUser(){
