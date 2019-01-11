@@ -401,7 +401,7 @@ class Api extends CI_Controller {
 			return false;
 	    }
 
-		$sql = 'UPDATE `users` set `video`=' . $this->db->escape($uriVideo) . ', `thumbnail`=' . $this->db->escape($uriThumb) . ' WHERE `id`=' . $user->id;
+		$sql = 'UPDATE `users` set `video`=' . $this->db->escape($uriVideo) . ', `thumbnail`=' . $this->db->escape($uriThumb) . ' `video_rejected`="0" WHERE `id`=' . $user->id;
 		$this->db->query($sql);
 
 		$user = $this->getUserByHash($hash);
