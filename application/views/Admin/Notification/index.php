@@ -497,6 +497,9 @@
 						$('#notification-users').show()
 						$('#notification-content,#notification-filter').hide()
 						$('#notification-add-confirm').click(function () {
+							if (!$('#notification-users .check-user:checked').length) {
+								return false
+							}
 							$( "#notification-add-form" ).submit()
 						})
 						$('#notification-back-2-button').click(function () {

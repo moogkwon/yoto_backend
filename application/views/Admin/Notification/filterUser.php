@@ -14,9 +14,9 @@
             <tr>
                 <td><?= $user->id ?></td>
                 <td><?= $user->first_name ?> <?= $user->last_name ?></td>
-                <td><?= $user->birthyear ?></td>
                 <td><?= $user->gender ?></td>
-                <td><?= $user->lgbtq ?></td>
+                <td><?= $user->birthyear ?></td>
+                <td><?= $user->lgbtq ? 'yes' : '' ?></td>
                 <td><input type="checkbox" class="check-user" name="checked_user[]" value="<?= $user->id ?>" checked=""></td>
             </tr>
         <?php endforeach; ?>

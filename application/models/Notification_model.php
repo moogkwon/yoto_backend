@@ -37,7 +37,9 @@ class Notification_model extends CI_Model{
 			'title' => 'Your vid has been rejected 🙈',
 			'content' => 'Let\'s upload a new vid 🤳📹',
 			'status' => '1',
-			'type' => '1'
+			'type' => '1',
+			'created_date' => date('Y-m-d H:i:s'),
+			'updated_date' => date('Y-m-d H:i:s'),
 		];
 		$this->db->insert('notifications',$notification);
 		$notification_id = $this->db->insert_id();
@@ -134,14 +136,15 @@ class Notification_model extends CI_Model{
 	public function filterCheckUsers($form_data){
 		$this->db->select('id,first_name,last_name,gender,email,birthyear,lgbtq');
 		$this->db->from('users');
-		if(isset($form_data['user_ids'])&&count($form_data['user_ids']))
-		$this->db->where_in('id',$form_data['user_ids']);
-		$this->db->where('lgbtq',$form_data['lgbtq']=='yes'?'1':'0');
-		if(isset($form_data['gender'])&&!empty($form_data['gender']))
-		$this->db->where('gender',$form_data['gender']);
-		if(isset($form_data['birth_year_from'])&&!empty($form_data['birth_year_from']))
+		// if(isset($form_data['user_ids'])&&count($form_data['user_ids']))
+		// $this->db->where_in('id',$form_data['user_ids']);
+		if(!empty($form_data['lgbtq']))
+			$this->db->where('lgbtq',$form_data['lgbtq']=='yes'?'1':'0');
+		if(!empty($form_data['gender']))
+			$this->db->where('gender',$form_data['gender']);
+		if(!empty($form_data['birth_year_from']))
 			$this->db->where('birthyear >=', $form_data['birth_year_from']);
-		if(isset($form_data['birth_year_to'])&&!empty($form_data['birth_year_to']))
+		if(!empty($form_data['birth_year_to']))
 			$this->db->where('birthyear <=', $form_data['birth_year_to']);
 		
 		$query = $this->db->get();

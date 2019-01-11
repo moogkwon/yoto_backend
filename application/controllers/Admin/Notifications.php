@@ -26,15 +26,15 @@ class Notifications extends CI_Controller {
 		$data['added_date'] 	= '';
 		if($this->input->post('save_noti')){
 			$notification 					= [];
-			$notification['title'] 		= $this->input->post('title');
+			$notification['title'] 		    = $this->input->post('title');
 			$notification['type'] 			= $this->input->post('type');
 			$notification['content'] 		= $this->input->post('content');
-			$notification['status']		= 1; //(string)$this->input->post('status');
+			$notification['status']		    = "1"; //(string)$this->input->post('status');
 			// $notification['added_date'] 	= $this->input->post('added_date');
 			$notification['created_date'] 	= date('Y-m-d H:i:s');
-            $notification['updated_date'] 	= date('Y-m-d H:i:s');
-            $user_ids = $this->input->post('checked_user');
-            $notification_id = $this->notification_model->insertNotification($notification, $user_ids);
+			$notification['updated_date'] 	= date('Y-m-d H:i:s');
+			$user_ids = $this->input->post('checked_user');
+			$notification_id = $this->notification_model->insertNotification($notification, $user_ids);
 			$this->session->set_flashdata('success', 'Notification Added Successfully.');
 			redirect('Admin/Notifications/');
 		}
