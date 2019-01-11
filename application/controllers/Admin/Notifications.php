@@ -25,15 +25,16 @@ class Notifications extends CI_Controller {
 		$data['status_arr'] 	= $this->status_arr;
 		$data['added_date'] 	= '';
 		if($this->input->post('save_noti')){
-			$form_data 					= [];
-			$form_data['title'] 		= $this->input->post('title');
-			$form_data['type'] 			= $this->input->post('type');
-			$form_data['content'] 		= $this->input->post('content');
-			$form_data['status']		= (string)$this->input->post('status');
-			$form_data['added_date'] 	= $this->input->post('added_date');
-			$form_data['created_date'] 	= date('Y-m-d H:i:s');
-			$form_data['updated_date'] 	= date('Y-m-d H:i:s');
-			$res 						= $this->notification_model->insertNotification($form_data);
+			$notification 					= [];
+			$notification['title'] 		= $this->input->post('title');
+			$notification['type'] 			= $this->input->post('type');
+			$notification['content'] 		= $this->input->post('content');
+			$notification['status']		= 1; //(string)$this->input->post('status');
+			// $notification['added_date'] 	= $this->input->post('added_date');
+			$notification['created_date'] 	= date('Y-m-d H:i:s');
+            $notification['updated_date'] 	= date('Y-m-d H:i:s');
+            $user_ids = $this->input->post('checked_user');
+            $notification_id = $this->notification_model->insertNotification($notification, $user_ids);
 			$this->session->set_flashdata('success', 'Notification Added Successfully.');
 			redirect('Admin/Notifications/');
 		}
@@ -161,6 +162,12 @@ class Notifications extends CI_Controller {
             "recordsFiltered" => $filterCount,
             "data" => $results
         )); exit();
+	}
+	public function filter_user()
+	{
+        $form_data 	= $this->formData();
+        $users = $this->notification_model->filterCheckUsers($form_data);	
+        $this->load->view('Admin/Notification/filterUser',['users' => $users]);
 	}
 	public function deleteData(){
 		if(isset($_POST['ids'])&&!empty($_POST['ids'])){

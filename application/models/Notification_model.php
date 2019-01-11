@@ -29,7 +29,7 @@ class Notification_model extends CI_Model{
 		$ids = array_map($map_id, $notifications);
 		return $this->db
 			->where_in('id', $ids)
-			->update('notifications', ['status' => 3]);
+			->update('notifications', ['status' => '3']);
 	}
 	public function insertRejectNotification($id)
 	{
@@ -139,10 +139,11 @@ class Notification_model extends CI_Model{
 		$this->db->where('lgbtq',$form_data['lgbtq']=='yes'?'1':'0');
 		if(isset($form_data['gender'])&&!empty($form_data['gender']))
 		$this->db->where('gender',$form_data['gender']);
-		if(isset($form_data['birth_year_from'])&&!empty($form_data['birth_year_from'])&&isset($form_data['birth_year_to'])&&!empty($form_data['birth_year_to'])){
+		if(isset($form_data['birth_year_from'])&&!empty($form_data['birth_year_from']))
 			$this->db->where('birthyear >=', $form_data['birth_year_from']);
+		if(isset($form_data['birth_year_to'])&&!empty($form_data['birth_year_to']))
 			$this->db->where('birthyear <=', $form_data['birth_year_to']);
-		}
+		
 		$query = $this->db->get();
 		///echo '<pre>'; print_r($this->db->last_query()); echo '</pre>'; die(__FILE__.' On this line '.__LINE__);
 
@@ -200,10 +201,17 @@ class Notification_model extends CI_Model{
 		$rows  	= $query->result();
 		return $rows;
 	}
-	public function insertNotification($data){
+	public function insertNotification($data, $user_ids){
 		$res = $this->db->insert('notifications',$data);
 		if ($res) {
-			return $this->db->insert_id();
+			$notification_id = $this->db->insert_id();
+			foreach ($user_ids as $user_id) {
+				$this->db->insert('notification_users', [
+					'notification_id' => $notification_id,
+					'user_id' => $user_id
+				]);
+			}
+			return $notification_id;
 		}
 		return false;
 	}

@@ -41,7 +41,7 @@
 									<button type="button" class="btn btn-primary send_noti" data-toggle="modal" data-target=".send_noti_modal" disabled>	
 										<i class="fa fa-envelope"></i>
 									</button>
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">	
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".add-notification-modal" id="notification-add-button">	
 										<i class="fa fa-plus"></i>
 									</button>
 									<button type="button" class="btn btn-danger delete_noti" disabled >	
@@ -51,7 +51,7 @@
 							</div>
 						</div> 
 					</div>
-					<div class="row">
+					<!-- <div class="row">
                         <div class="col-md-12">
                             <div class="card card-accent-theme">
                                 <div class="card-body">
@@ -180,7 +180,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-accent-theme">
@@ -190,11 +190,11 @@
 											<tr>
                                                 <th><input id="all" type="checkbox" class="form-control selected_id" name="selected_id1" ></th>
                                                 <th>ID</th>
-                                                <th>Notification Title</th>
-                                                <th>Notification Type</th>
-                                                <th>Notification Content</th>
-                                                <th>Notification Status</th>
-                                                <th>Date Added</th>
+                                                <th>Type</th>
+                                                <th>Title</th>
+                                                <th>Content</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -205,12 +205,15 @@
 											<tr>
 												<td><input type="checkbox" class="form-control checkboxclass" name="selected_id" value="<?php echo $notification->id; ?>" ></td>
                                                 <td><?php echo $notification->id; ?></td>
-                                                <td><?php echo $notification->title; ?></td>
                                                 <td><?php echo $notification->type_title; ?></td>
+                                                <td><?php echo $notification->title; ?></td>
                                                 <td><?php echo $notification->content; ?></td>
+                                                <td><?php echo $notification->created_date; ?></td>
                                                 <td><?php echo $status_arr[$notification->status]; ?></td>
-                                                <td><?php echo $notification->added_date; ?></td>
-                                                <td><a class="btn btn-primary openEditModel" href="javascript:void(0)" style="margin: 0px; padding: 5px 10px;" noti_id = <?php echo $notification->id; ?>><i class="fa fa-pencil"></i></a></td>
+                                                <td>
+													<!-- <a class="btn btn-primary openEditModel" href="javascript:void(0)" style="margin: 0px; padding: 5px 10px;" noti_id = <?php echo $notification->id; ?>><i class="fa fa-pencil"></i></a>
+													<a class="btn btn-danger openEditModel" href="javascript:void(0)" style="margin: 0px; padding: 5px 10px;" noti_id = <?php echo $notification->id; ?>><i class="fa fa-trash"></i></a> -->
+												</td>
                                             </tr>
 											<?php } } ?>
 										</tbody>
@@ -234,7 +237,7 @@
         <!-- end main -->
     </div>
     <!-- end app-body -->
-	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal fade add-notification-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -243,18 +246,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-sm-12">
-						<form action="<?php echo site_url('Admin/Notifications'); ?>" method="post">
+						<form action="<?php echo site_url('Admin/Notifications'); ?>" method="post" id="notification-add-form">
 							<input type="hidden" name="save_noti" value="true" />
 							<div class="card">
-								<div class="card-header text-theme">
-									<strong>Notification</strong>
-									<small>Form</small>
-								</div>
-								<div class="card-body">
-									<div class="form-group">
-										<label for="title">Title</label>
-										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required />
-									</div>
+								<div class="card-body" id="notification-content">
 									<div class="form-group">
 										<label for="type">Type</label>
 										<select name="type" id="type" class="form-control">
@@ -264,32 +259,125 @@
 										</select>
 									</div>
 									<div class="form-group">
-										<label for="content">Content</label>
-										<textarea class="form-control" id="content" name="content" ></textarea>
+										<label for="title">Title</label>
+										<input type="text" class="form-control required" id="title" name="title" placeholder="Title" required />
 									</div>
 									<div class="form-group">
+										<label for="content">Content</label>
+										<textarea class="form-control required" id="content" name="content" required></textarea>
+									</div>
+									<!-- <div class="form-group">
 										<label for="status">Status</label>
 										<select name="status" id="status" class="form-control">
 											<?php foreach($status_arr as $key=>$status){ ?>
 											<option value="<?php echo $key; ?>"><?php echo $status; ?></option>
 											<?php } ?>
 										</select>
-									</div>
+									</div> -->
 									<!--/.row-->
-									<div class="form-group">
-										<label for="added_date">Date</label>
+									<!-- <div class="form-group">
+										<label for="added_date">Send date (Leave empty to send immediately)</label>
 										<input type="text" class="form-control datepicker" id="added_date" name="added_date" placeholder="Date" />
+									</div> -->
+									<div class="form-group row">
+										<div class="col-md-12 text-right">
+											<button type="button" class="btn btn-theme btn-sm" id="notification-next-button"><i class="fa fa-dot-circle-o"></i> Next</button>
+										</div>
 									</div>
-									<button type="submit" class="btn btn-theme btn-sm"><i class="fa fa-dot-circle-o"></i> Submit</button>
+								</div>
+								<div class="card-body" style="display:none;" id="notification-filter">
+									<form action="<?php echo site_url('Admin/Notifications/Confirm'); ?>" method="get" class="form-horizontal">
+									<input type="hidden" name="search" value="true" />
+                                        <div class="form-group row">
+											<div class="col-md-6">
+												<label for="activity">Activity
+												</label>
+												<select name="activity" id="activity" class="form-control">
+													<option value="" <?php echo $active===''?'selected':''; ?>>All</option>
+													<option value="1" <?php echo $active==='1'?'selected':''; ?>>Online</option>
+													<option value="2" <?php echo $active==='2'?'selected':''; ?>>Offline</option>
+												</select>
+                                            </div>
+											<div class="col-md-6">
+												<label for="country_id">Country
+												</label>
+												<select name="country_id" id="country_id" class="form-control">
+													<option value="0" <?php echo $active==='0'?'selected':''; ?>>Country</option>
+													<?php foreach($countries as $key=>$country){ ?>
+													<option value="<?php echo $country->country_id; ?>" <?php echo $country==$country->country_id?'selected':''; ?>><?php echo $country->country_name; ?></option>
+													<?php } ?>
+												</select>
+                                            </div>
+                                        </div>
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label for="state_id">		State
+												</label>
+												<select name="state_id" id="state_id" class="form-control">
+												</select>
+                                            </div>
+											<div class="col-md-6">
+												<label for="city_id">		City
+												</label>
+												<select name="city_id" id="city_id" class="form-control">
+													
+												</select>
+                                            </div>
+                                        </div>
+										<div class="form-group row">
+                                            <div class="col-md-6">
+												<label for="f_gender">Gender</label>
+                                               <select name="gender" id="f_gender" class="form-control">
+													<option value="" >Any
+													</option>
+													<option value="male" >Male
+													</option>
+													<option value="female" >Female
+													</option>
+												</select>
+                                            </div>
+                                            <div class="col-md-6">
+												<label for="f_lgbtq">LGBTQ</label>
+												<select name="lgbtq" id="f_lgbtq" class="form-control">
+													<option value="" >Any
+													</option>
+													<option value="yes" >Yes
+													</option>
+													<option value="no" >No
+													</option>
+												</select>
+                                            </div>
+                                        </div>
+										<div class="form-group row">
+                                            <div class="col-md-6">
+												<label for="f_birth_year_from">Birth Year From</label>
+                                               <input type="text" name="birth_year_from" id="f_birth_year_from"  class="form-control" />
+                                            </div>
+                                            <div class="col-md-6">
+												<label for="f_birth_year_to">Birth Year To</label>
+												<input type="text" name="birth_year_to" id="f_birth_year_to" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-12 text-right">
+                                                <button type="button" class="btn btn-default btn-sm" id="notification-back-1-button">
+													<i class="fa fa-arrow-left"></i>Back
+												</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="notification-filter-button">
+													<i class="fa fa-search"></i>Filter
+												</button>
+                                            </div>
+                                        </div>
+                                    </form>
+								</div>
+								<div class="card-body" style="display:none;" id="notification-users">
+									
 								</div>
 								<!-- end card-body -->
 							</div>
 						</form>
 						<!-- end card -->
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -376,6 +464,51 @@
 					{ "data": "action"},
 				]
 			});
+			$('#notification-add-button').click(function () {
+				$('#notification-content').show()
+				$('#notification-filter,#notification-users').hide()
+			})
+			$('#notification-next-button').click(function () {
+				if(!$('#title')[0].checkValidity()) {
+					$('#title').addClass('is-invalid')
+					return false
+				} else {
+					$('#title').removeClass('is-invalid')
+				}
+				if(!$('#content')[0].checkValidity()) {
+					$('#content').addClass('is-invalid')
+					return false
+				} else {
+					$('#content').removeClass('is-invalid')
+				}
+				$('#notification-filter').show()
+				$('#notification-content,#notification-users').hide()
+			})
+			$('#notification-back-1-button').click(function () {
+				$('#notification-content').show()
+				$('#notification-filter,#notification-users').hide()
+			})
+			$('#notification-filter-button').click(function () {
+				var query = $( "#notification-add-form" ).serialize()
+				$.ajax({
+					url: "<?=base_url()?>Admin/notifications/filter_user?" + query,
+					success: function(data) {
+						$('#notification-users').html(data)
+						$('#notification-users').show()
+						$('#notification-content,#notification-filter').hide()
+						$('#notification-add-confirm').click(function () {
+							$( "#notification-add-form" ).submit()
+						})
+						$('#notification-back-2-button').click(function () {
+							$('#notification-filter').show()
+							$('#notification-content,#notification-users').hide()
+						})
+						$('#checkAll').change(function() {
+							$('#notification-users .check-user').prop('checked', $(this).is(':checked'))
+						})
+					}
+				});
+			})
 		});
 	})(window, document, window.jQuery);
 	</script>
