@@ -134,10 +134,36 @@ class Notification_model extends CI_Model{
 		return $rows;
     }
 	public function filterCheckUsers($form_data){
+		$country = $this->db->select()
+			->where('country_id', $form_data['country_id'])
+			->get('countries')
+			->row();
+		$state = $this->db->select()
+			->where('state_id', $form_data['state_id'])
+			->get('states')
+			->row();
+		$city = $this->db->select()
+			->where('city_id', $form_data['city_id'])
+			->get('cities')
+			->row();
+			
 		$this->db->select('id,first_name,last_name,gender,email,birthyear,lgbtq');
 		$this->db->from('users');
-		// if(isset($form_data['user_ids'])&&count($form_data['user_ids']))
-		// $this->db->where_in('id',$form_data['user_ids']);
+		if(!empty($form_data['activity']))
+			$this->db->where('online',$form_data['activity'] == '1' ? '1' : '0');
+		if(!empty($form_data['country_id'])) {
+			$this->db->where('location_country', $country->country_name);
+		}
+		if(!empty($form_data['state_id'])) {
+			$this->db->where('location_state', $state->state_name);
+		}
+		if(!empty($form_data['city_id'])) {
+			$this->db->where('location_city', $city->city_name);
+		}
+		if(!empty($form_data['state_id']))
+			$this->db->where('state_id',$form_data['state_id']);
+		if(!empty($form_data['city_id']))
+			$this->db->where('city_id',$form_data['city_id']);
 		if(!empty($form_data['lgbtq']))
 			$this->db->where('lgbtq',$form_data['lgbtq']=='yes'?'1':'0');
 		if(!empty($form_data['gender']))
