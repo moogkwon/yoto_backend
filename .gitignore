@@ -34,3 +34,4 @@ backup171018
 /backup171018
 .vscode/
 application/vendor
+application/.env

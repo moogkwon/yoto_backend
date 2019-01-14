@@ -27,7 +27,7 @@ $root	= isset($_SERVER["HTTPS"]) ? 'https://' : 'http://';
 $root	.= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
 $root 	.= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 
-$config['base_url'] = 'http://admin.coolfriend.co';
+$config['base_url'] = '/';
 
 /*
 |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ $config['charset'] = 'UTF-8';
 | setting this variable to TRUE (boolean).  See the user guide for details.
 |
 */
-$config['enable_hooks'] = FALSE;
+$config['enable_hooks'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
