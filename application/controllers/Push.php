@@ -31,11 +31,22 @@ class Push extends CI_Controller {
             foreach ($notifications as $notification) {
                 if (!$notification->device_token) continue;
                 echo  $notification->device_token . PHP_EOL;
-                $message = CloudMessage::withTarget('token', $notification->device_token)
-                ->withNotification(Notification::create($notification->title, $notification->content))
-                ->withData([
-                    'type' => $notification->type
-                ]);
+                if ($notification->type == '2') {
+                    $message = CloudMessage::withTarget('token', $notification->device_token)
+                        ->withData([
+                            'type' => $notification->type,
+                            'title' => $notification->title,
+                            'content' => $notification->content,
+                        ]);
+                } else {
+                    $message = CloudMessage::withTarget('token', $notification->device_token)
+                        ->withNotification(Notification::create($notification->title, $notification->content))
+                        ->withData([
+                            'type' => $notification->type,
+                            'title' => $notification->title,
+                            'content' => $notification->content,
+                        ]);
+                }
                 // var_dump($message);
                 try {
                     $messaging->send($message);

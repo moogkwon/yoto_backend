@@ -216,12 +216,18 @@ $return = shell_exec($cmd); */
 
     public function changeStatus($id = 0, $status) {
         if ($id == 0)   return;
-        $this->user_model->changeStatus($id, $status);
+		$this->user_model->changeStatus($id, $status);
+		if ($status == '1') {
+			$this->notification_model->insertBlockNotification($id);
+		}
+		var_dump($status);
+		echo 'success'; exit();
     }
 	public function rejectVideo($id = 0) {
         if ($id == 0)   return;
 		$this->user_model->rejectVideo($id);
 		$this->notification_model->insertRejectNotification($id);
+		echo 'success'; exit();
     }
 	public function BlockedUser(){
         $data['users'] = $this->user_model->getBlockedUser();

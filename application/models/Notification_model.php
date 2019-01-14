@@ -48,6 +48,23 @@ class Notification_model extends CI_Model{
 			'user_id' => $id
 		]);
 	}
+	public function insertBlockNotification($id)
+	{
+		$notification = [
+			'title' => 'You’ve been reported by users too many times for misconduct.',
+			'content' => 'We will be reviewing you account to determine what action needs to be made',
+			'status' => '1',
+			'type' => '2',
+			'created_date' => date('Y-m-d H:i:s'),
+			'updated_date' => date('Y-m-d H:i:s'),
+		];
+		$this->db->insert('notifications',$notification);
+		$notification_id = $this->db->insert_id();
+		$this->db->insert('notification_users', [
+			'notification_id' => $notification_id,
+			'user_id' => $id
+		]);
+	}
 	public function getTotalCount() {
         $result = $this->db->select("COUNT(id) AS 'count'")
                             ->from('notifications')
