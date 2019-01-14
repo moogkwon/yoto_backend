@@ -1002,7 +1002,6 @@ class Api extends CI_Controller {
 									`users` u
 					LEFT JOIN		`user_hashes` uh ON (u.`id`=uh.`user_id`)
 				WHERE
-					u.`blocked` = 0 AND
 					uh.`hash` = ' . $this->db->escape($hash);
 		$query = $this->db->query($sql);
 		$user = $query->row();
