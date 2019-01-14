@@ -1,20 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
-
 class ApiCall extends CI_Controller {
 
 	private $s3Bucket = 'coolfriend';
 
 	public function __construct() {
-        parent::__construct();
+		parent::__construct();
 
 		$this->load->helper('url');
 		$this->load->helper('cookie');
-        $this->load->database('default');
+		$this->load->database('default');
 		$this->load->library('s3');
-    }
+	}
 
 	public function callStart() {
 		$hash = $this->input->post('hash');
