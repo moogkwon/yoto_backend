@@ -1,47 +1,40 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Report extends MY_Controller {
-    
-	public function __construct() {
-        parent::__construct();
-
-		$this->load->model('ReportModel');
-    }
-    
-	public function index() {
-        $data = array();
-        $data['title'] = "Management";
-        $data['page'] = 'Griit';
-
-		$this->load->view('admin/report/index', $data);
-    }
-
-    public function getData() {
-        $search = $this->input->get("search")["value"];
-        $order  = $this->input->get('order') [0];
-        $start  = $this->input->get("start");
-        $length = $this->input->get("length");
-
-        $totalCount = $this->ReportModel->getTotalCount();
-        $filterCount = $this->ReportModel->getFilterCount($search);
-
-        $results = $this->ReportModel->getData($search, $order, $start, $length);
-        
-        foreach($results as $index => $result) {
-            $results [$index]->userName = "<img src='".$this->getPhotoUrl($results [$index]->photoUrl_user)."' class='profile-table-thumb'>".$result->userName;
-            $results [$index]->reporterName = "<img src='".$this->getPhotoUrl($results [$index]->photoUrl_reporter)."' class='profile-table-thumb'>".$result->reporterName;
-
-            $report = $results [$index]->report;
-            $report = str_replace("'", "\\'", $report);
-            $results [$index]->videoshow = '<a href="#" onclick="onShowModal(\''.$report.'\', \'/upload/report/' . $results [$index]->id .'.jpg\')">Show</a>';
-//            $results [$index]->videoshow = '<a href="/upload/report/1.jpg" target="_blank">Show</a>';
-        }
-
-        echo json_encode(array(
-            "recordsTotal" => $totalCount,
-            "recordsFiltered" => $filterCount,
-            "data" => $results
-        ));
-    }
+class Report extends CI_Controller {
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	*/
+	public $s3Bucket = 'coolfriend';
+	public function __construct()
+	{
+		parent::__construct();
+		if(!$this->session->userdata('email')){
+			redirect('Login/');
+		}
+		//$this->load->library('s3');
+		$this->load->model('user_model');
+		$this->load->model('report_model');
+	}
+	public function index()
+	{
+		$data['reports'] = $this->report_model->getReports();
+		$this->load->view('Admin/Report/index',$data);
+	}
+	public function MostReportedUser(){
+		$data['reports'] = $this->report_model->mostReportedUsers();
+		//echo '<pre>'; print_r($data['reports']); echo '</pre>'; die(__FILE__.' On this line '.__LINE__);
+		$this->load->view('Admin/Report/most_reported_user',$data);
+	}
 }

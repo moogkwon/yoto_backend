@@ -117,9 +117,12 @@ class Api extends CI_Controller {
 			echo json_encode($result);
 		}
 
-		$sql = 'SELECT * FROM `user_hashes` WHERE `user_id`=' . (int)$user->id;
-		$query = $this->db->query($sql);
-		$hashRow = $query->row();
+		$sql = 'DELETE FROM `user_hashes` WHERE `user_id`=' . (int)$user->id;
+		$this->db->query($sql);
+		// $sql = 'SELECT * FROM `user_hashes` WHERE `user_id`=' . (int)$user->id;
+		// $query = $this->db->query($sql);
+		// $hashRow = $query->row();
+		$hashRow = false;
 		if ($hashRow) {
 			$hash = $hashRow->hash;
 		} else {

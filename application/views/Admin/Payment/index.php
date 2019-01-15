@@ -1,81 +1,99 @@
-<?php $this->load->view('admin/layout/header'); ?>
-
-<!-- Datatables-->
-<link rel="stylesheet" href="<?=base_url()?>asset/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
-<link rel="stylesheet" href="<?=base_url()?>asset/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
-<link rel="stylesheet" href="<?=base_url()?>asset/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
-
-
-<!-- Page content-->
-<div class="content-wrapper">
-    <div class="content-heading">
-        <div>Payment History
-            <small>Manage payment information.</small>
-        </div>
-    </div>
-    <!-- START row-->
-    <div class="row">
-        <div class="col-md-12">
-            <!-- START card-->
-            <div class="card card-default">
-                <div class="card-header">Payment List</div>
-                <div class="card-body">
-                    <table class="table table-striped" id="Ajax_DataTables">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Username</th>
-                                <th>PhoneNumber</th>
-                                <th>Cup count</th>
-                                <th>Price</th>
-                                <th>Created at</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+<?php $this->load->view('elements/header'); ?>
+<?php $this->load->view('elements/header_top'); ?>
+    <!-- end header -->
+    <div class="app-body">
+        <?php $this->load->view('elements/left_sidebar_admin'); ?>
+        <!-- end sidebar -->
+        <main class="main">
+            <!-- Breadcrumb -->
+            <ol class="breadcrumb bc-colored bg-theme" id="breadcrumb">
+                <li class="breadcrumb-item ">
+                    Payment
+                </li>
+                <li class="breadcrumb-item">
+                   All Payment
+                </li>
+            </ol>
+            <div class="container-fluid">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-accent-theme">
+                                <div class="card-body">
+                                    <h4 class="text-theme">Payment</h4>
+									<p><small>Manage payment information.</small></p>
+                                    <br />
+                                    <table class="table table-hover dataTable table-striped w-full" data-plugin="dataTable" width="100%">
+                                        <thead>
+                                             <tr>
+                                                <th>User ID</th>
+                                                <th>Email</th>
+                                                <th>Amount</th>
+                                                <th>Currency</th>
+                                                <th>Package</th>
+                                                <th>Duration</th>
+                                                <th>Date</th>
+                                                <th>Expiry</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+											<?php if(!empty($payments)) { 
+											 
+											?>
+												<?php foreach($payments as $key=>$payment) { 
+												if($payment->gender == 'male'){
+													$style = 'color: blue';
+												}else{
+													$style = 'color: red';
+												}
+												?>
+													<tr>
+														<td>
+															<a href='<?php echo site_url('Admin/Users/View/'.$payment->user_id); ?>' style="<?php echo $style; ?>"><?php echo $payment->user_id; ?></a>
+														</td>
+														<td>
+															<?php echo $payment->email;?>
+														</td>
+														<td>
+															<?php echo $payment->amount; ?>
+														</td>
+														<td>
+															<?php echo $payment->currency; ?>
+														</td>
+														<td>
+															<?php echo $payment->package; ?>
+														</td>
+														<td>
+															<?php echo $payment->duration; ?>
+														</td>
+														<td>
+															<?php echo $payment->dated; ?>
+														</td>
+														<td>
+															<?php echo $payment->expire; ?>
+														</td>
+													</tr>
+												<?php } ?>
+											<?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end card-body -->
+                            </div>
+                            <!-- end card -->
+                            <!-- end card -->
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <!--/.col-->
+                    </div>
+                    <!-- end row -->
                 </div>
+                <!-- end animated fadeIn -->
             </div>
-            <!-- END card-->
-        </div>
+            <!-- end container-fluid -->
+        </main>
+        <!-- end main -->
     </div>
-    <!-- END row-->
-</div>
-
-
-<?php $this->load->view('admin/layout/footer'); ?>
-
-<!-- Datatables-->
-<script src="<?=base_url()?>asset/vendor/datatables.net/js/jquery.dataTables.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-buttons/js/dataTables.buttons.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-buttons/js/buttons.colVis.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-buttons/js/buttons.flash.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-buttons/js/buttons.html5.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-buttons/js/buttons.print.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-keytable/js/dataTables.keyTable.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-responsive/js/dataTables.responsive.js"></script>
-<script src="<?=base_url()?>asset/vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-
-
-<script>
-var ajax_datatable;
-(function(window, document, $, undefined) {
-    $(function() {
-        ajax_datatable = $("#Ajax_DataTables").dataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "<?=base_url()?>admin/payment/getData",
-            "columns": [
-                { "data": "no" },
-                { "data": "firstName" },
-                { "data": "phoneNumber" },
-                { "data": "cup_count" },
-                { "data": "price" },
-                { "data": "created_at" },
-            ]
-        });
-    });
-})(window, document, window.jQuery);
-</script>
+    <!-- end app-body -->
+	<?php $this->load->view('elements/footer'); ?>

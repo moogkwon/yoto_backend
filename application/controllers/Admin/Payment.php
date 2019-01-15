@@ -1,41 +1,34 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Payment extends MY_Controller {
-    
-	public function __construct() {
-        parent::__construct();
-
-		$this->load->model('PaymentModel');
-    }
-    
-	public function index() {
-        $data = array();
-        $data['title'] = "Payment";
-        $data['page'] = 'Griit';
-
-		$this->load->view('admin/payment/index', $data);
-    }
-
-    public function getData() {
-        $search = $this->input->get("search")["value"];
-        $order  = $this->input->get('order') [0];
-        $start  = $this->input->get("start");
-        $length = $this->input->get("length");
-
-        $totalCount = $this->PaymentModel->getTotalCount();
-        $filterCount = $this->PaymentModel->getFilterCount($search);
-
-        $results = $this->PaymentModel->getData($search, $order, $start, $length);
-        
-        foreach($results as $index => $result) {
-            $results [$index]->no = $start + $index + 1;
-        }
-
-        echo json_encode(array(
-            "recordsTotal" => $totalCount,
-            "recordsFiltered" => $filterCount,
-            "data" => $results
-        ));
-    }
+class Payment extends CI_Controller {
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		if(!$this->session->userdata('email')){
+			redirect('Login/');
+		}
+		$this->load->model('user_model');
+		$this->load->model('payment_model');
+		$this->load->library('form_validation');
+	}
+	public function index()
+	{
+		$data['payments'] = $this->payment_model->getPayments();
+		$this->load->view('Admin/Payment/index',$data);
+	}
 }

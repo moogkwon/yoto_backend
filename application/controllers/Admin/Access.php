@@ -1,41 +1,35 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Access extends MY_Controller {
-    
-	public function __construct() {
-        parent::__construct();
-
-		$this->load->model('AccessModel');
-    }
-    
-	public function index() {
-        $data = array();
-        $data['title'] = "Management";
-        $data['page'] = 'Griit';
-
-		$this->load->view('admin/access/index', $data);
-    }
-
-    public function getData() {
-        $search = $this->input->get("search")["value"];
-        $order  = $this->input->get('order') [0];
-        $start  = $this->input->get("start");
-        $length = $this->input->get("length");
-
-        $totalCount = $this->AccessModel->getTotalCount();
-        $filterCount = $this->AccessModel->getFilterCount($search);
-
-        $results = $this->AccessModel->getData($search, $order, $start, $length);
-        
-        foreach($results as $index => $result) {
-            $results [$index]->no = $start + $index + 1;
-        }
-
-        echo json_encode(array(
-            "recordsTotal" => $totalCount,
-            "recordsFiltered" => $filterCount,
-            "data" => $results
-        ));
-    }
+class Access extends CI_Controller {
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		if(!$this->session->userdata('email')){
+			redirect('Login/');
+		}
+		$this->load->model('user_model');
+		$this->load->model('access_model');
+		$this->load->model('call_model');
+		$this->load->library('form_validation');
+	}
+	public function index()
+	{
+		$data['accesses'] = $this->call_model->getRandomCall();
+		$this->load->view('Admin/Access/index',$data);
+	}
 }
