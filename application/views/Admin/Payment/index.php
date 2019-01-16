@@ -52,7 +52,7 @@
 															<a href='<?php echo site_url('Admin/Users/View/'.$payment->user_id); ?>' style="<?php echo $style; ?>"><?php echo $payment->user_id; ?></a>
 														</td>
 														<td>
-															<?php echo $payment->email;?>
+															<?php echo $payment->first_name;?> <?php echo $payment->last_name;?>
 														</td>
 														<td>
 															<?php echo $payment->amount; ?>
@@ -70,7 +70,7 @@
 															<?php echo $payment->dated; ?>
 														</td>
 														<td>
-															<?php echo $payment->expire; ?>
+															<?php echo $payment->expire; ?> days
 														</td>
 													</tr>
 												<?php } ?>

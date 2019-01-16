@@ -28,7 +28,21 @@ class Payment extends CI_Controller {
 	}
 	public function index()
 	{
-		$data['payments'] = $this->payment_model->getPayments();
+		$payments = $this->payment_model->getPayments();
+		foreach ($payments as $key => $payment) {
+			$payment->dated = date_format(date_create($payment->dated), 'm/d/Y');
+			$expire = strtotime($payment->dated) - strtotime('now');
+			if ($payment->package == 'yoto.monthly1') {
+				$expire = $expire + (30 * 24 * 60 * 60);
+			} else if ($payment->package == 'yoto.monthly6') {
+				$expire = $expire + (6 * 30 * 24 * 60 * 60);
+			} else if ($payment->package == 'yoto.monthly12') {
+				$expire = $expire + (365 * 24 * 60 * 60);
+			}
+			$payment->expire = $expire > 0 ? floor($expire / (24 * 60 * 60)) : 0;
+			$payments[$key] = $payment;
+		}
+		$data['payments'] = $payments;
 		$this->load->view('Admin/Payment/index',$data);
 	}
 }
