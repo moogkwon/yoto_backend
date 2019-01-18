@@ -850,6 +850,10 @@ class Api extends CI_Controller {
 			echo json_encode($result);
 			return false;
 		}
+		$sql = 'DELETE FROM `user_firebase_tokens` 
+						WHERE
+					`user_id`=' . (int)$user->id;
+		$this->db->query($sql);
 		$sql = 'INSERT IGNORE INTO `user_firebase_tokens` SET
 					`token`=' . $this->db->escape($token) . ',
 					`user_id`=' . (int)$user->id;
