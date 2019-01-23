@@ -34,8 +34,8 @@ class Notification_model extends CI_Model{
 	public function insertRejectNotification($id)
 	{
 		$notification = [
-			'title' => 'Your vid has been rejected 🙈',
-			'content' => 'Let\'s upload a new vid 🤳📹',
+			'title' => 'Your profile has been rejected 😶',
+			'content' => 'Let\'s upload a new profile ☝',
 			'status' => '1',
 			'type' => '1',
 			'created_date' => date('Y-m-d H:i:s'),

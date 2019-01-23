@@ -86,7 +86,7 @@ class Call_model extends CI_Model {
     public function getData($search, $order, $start, $length, $type='') {
         $where = $this->getFilterCondition($search);
 
-        $this->db->select('call.id as id,type,connected_at,end_at,duration,caller.id  callerId,caller.first_name callerName,caller.email callerEmail,caller.gender callerGender,caller.video callerVideo,caller.thumbnail callerThumb,callee.id calleeId,callee.first_name calleeName,callee.email calleeEmail,callee.gender calleeGender,callee.video calleeVideo,callee.thumbnail calleeThumb');
+        $this->db->select('call.id as id,type,connected_at,end_at,duration,caller.id  callerId,caller.first_name callerName,caller.email callerEmail,caller.gender callerGender,caller.video callerVideo,caller.thumbnail callerThumb,caller.photo callerPhoto,callee.id calleeId,callee.first_name calleeName,callee.email calleeEmail,callee.gender calleeGender,callee.video calleeVideo,callee.thumbnail calleeThumb,callee.photo calleePhoto');
         $this->db->from($this->tblName.' as call');
         $this->db->join("users AS caller", "caller_id = caller.id", "inner");
         $this->db->join("users AS callee", "callee_id = callee.id", "inner");

@@ -390,6 +390,9 @@ class Api extends CI_Controller
         if ($user->video) {
             S3::deleteObject($this->s3Bucket, $user->video);
         }
+        if ($user->photo) {
+						S3::deleteObject($this->s3Bucket, $user->photo);
+        }
 
         // Make thumbnail
         $thumb = '/tmp/' . mt_rand(100000, 999999) . '.jpg';
@@ -412,7 +415,7 @@ class Api extends CI_Controller
             return false;
         }
 
-        $sql = 'UPDATE `users` set `video`=' . $this->db->escape($uriVideo) . ', `thumbnail`=' . $this->db->escape($uriThumb) . ', `video_rejected`="0" WHERE `id`=' . $user->id;
+        $sql = 'UPDATE `users` set `video`=' . $this->db->escape($uriVideo) . ', `thumbnail`=' . $this->db->escape($uriThumb) . ', `video_rejected`="0", `photo`=null WHERE `id`=' . $user->id;
         $this->db->query($sql);
 
         $user = $this->getUserByHash($hash);
@@ -448,6 +451,12 @@ class Api extends CI_Controller
         // Remove old data
         if ($user->photo) {
             S3::deleteObject($this->s3Bucket, $user->photo);
+				}
+				if ($user->thumbnail) {
+            S3::deleteObject($this->s3Bucket, $user->thumbnail);
+        }
+        if ($user->video) {
+            S3::deleteObject($this->s3Bucket, $user->video);
         }
 
         // Store photo
@@ -459,7 +468,7 @@ class Api extends CI_Controller
             return false;
         }
 
-        $sql = 'UPDATE `users` set `photo`=' . $this->db->escape($uriPhoto) . ', `thumbnail`=' . $this->db->escape($uriThumb) . ', `video_rejected`="0" WHERE `id`=' . $user->id;
+        $sql = 'UPDATE `users` set `photo`=' . $this->db->escape($uriPhoto) . ', `thumbnail`=null, `video`=null, `video_rejected`="0" WHERE `id`=' . $user->id;
         $this->db->query($sql);
 
         $user = $this->getUserByHash($hash);
@@ -504,7 +513,7 @@ class Api extends CI_Controller
 				WHERE
 					' . ($gender ? 'u.`gender` = ' . ($gender == 'm' ? '\'male\' AND' : '') . ($gender == 'f' ? '\'female\' AND' : '')  : '') . '
 					u.`id`  != ' . (int)$user->id . ' AND
-					u.`video` IS NOT NULL AND
+					-- u.`video` IS NOT NULL AND
 					u.`online`=1 AND
 					u.`blocked`=0
 				ORDER BY
@@ -518,8 +527,13 @@ class Api extends CI_Controller
                 //$users[$k]['video'] = S3::getAuthenticatedURL($this->s3Bucket, $user['video'], 10*365*86400, false, true);
                 $users[$k]['video'] = $this->cloudFrontWeb . $user['video'];
                 $users[$k]['video_rtmp'] = $this->cloudFrontRTMP . $user['video'];
-                $users[$k]['avatar'] = $this->cloudFrontWeb . $user['avatar'];
                 $users[$k]['thumbnail'] = $this->cloudFrontWeb . $user['thumbnail'];
+							}
+							if ($user['avatar']) {
+								$users[$k]['avatar'] = $this->cloudFrontWeb . $user['avatar'];
+            }
+            if ($user['photo']) {
+                $users[$k]['photo'] = $this->cloudFrontWeb . $user['photo'];
             }
         }
         $result = ['code' => 200, 'message' => 'Ok', 'data' => $users];
@@ -676,6 +690,9 @@ class Api extends CI_Controller
             }
             if ($user['thumbnail']) {
                 $users[$k]['thumbnail'] = $this->cloudFrontWeb . $user['thumbnail'];
+            }
+            if ($user['photo']) {
+                $users[$k]['photo'] = $this->cloudFrontWeb . $user['photo'];
             }
             if ($user['video']) {
                 $users[$k]['video'] = $this->cloudFrontWeb . $user['video'];
@@ -1091,6 +1108,10 @@ class Api extends CI_Controller
         if ($user->avatar) {
             //$user->avatar = S3::getAuthenticatedURL($this->s3Bucket, $user->avatar, 10*365*86400, false, true);
             $user->avatar = $this->cloudFrontWeb . $user->avatar;
+        }
+        if ($user->photo) {
+            //$user->photo = S3::getAuthenticatedURL($this->s3Bucket, $user->photo, 10*365*86400, false, true);
+            $user->photo = $this->cloudFrontWeb . $user->photo;
         }
         if ($user->thumbnail) {
             //$user->avatar = S3::getAuthenticatedURL($this->s3Bucket, $user->avatar, 10*365*86400, false, true);

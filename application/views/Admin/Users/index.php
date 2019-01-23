@@ -173,7 +173,7 @@ var ajax_datatable;
 })(window, document, window.jQuery);
 
 function rejectVideo(id) {
-    if (confirm('Do you want to reject video?')) {
+    if (confirm('Do you want to reject profile?')) {
         $.ajax({
             url: "<?=site_url()?>Admin/Users/rejectVideo/" + id,
             method: "POST",
