@@ -58,6 +58,7 @@ $route['v1/user/update']='api/update';
 $route['v1/user/location']='api/setLocation';
 
 $route['v1/user/upload-video']='api/uploadVideo';
+$route['v1/user/upload-photo']='api/uploadPhoto';
 $route['v1/contacts/selective']='api/selective';
 $route['v1/friend/add']='api/addFriend';
 $route['v1/friend/remove']='api/removeFriend';
