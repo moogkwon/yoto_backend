@@ -77,6 +77,7 @@ $return = shell_exec($cmd); */
         $out_going		= $this->call_model->outGoingCall($user_id);
         $out_going_r	= $this->call_model->outGoingSelective($user_id);
         $out_going_s	= $this->call_model->outGoingRandom($user_id);
+        $video_url = '';
         /*  echo '<pre>'; print_r($reporteecount); echo '</pre>'; die(__FILE__.' On this line '.__LINE__);  */
         if ($user->video) {
             $video_url = 'https://s3.amazonaws.com/'.$this->s3Bucket.'/'.$user->video;
@@ -142,6 +143,7 @@ $return = shell_exec($cmd); */
                 $video_url = 'https://s3.amazonaws.com/'.$this->s3Bucket.'/'.$result->video_url;
                 $video_url = S3::getAuthenticatedURL($this->s3Bucket, $result->video_url, 10*365*86400, false, true);
             } else {
+                $video_url = null;
                 // $video_url =  base_url('uploads/videos/sample.mp4');
             }
             if ($result->video_thumb) {
