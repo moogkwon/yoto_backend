@@ -206,8 +206,8 @@
 												<td><input type="checkbox" class="form-control checkboxclass" name="selected_id" value="<?php echo $notification->id; ?>" ></td>
                                                 <td><?php echo $notification->id; ?></td>
                                                 <td><?php echo $notification->type_title; ?></td>
-                                                <td style="width: 30%"><?php echo $notification->title; ?></td>
-                                                <td style="width: 30%"><?php echo $notification->content; ?></td>
+                                                <td style="width: 30%; display: inline-block;"><?php echo $notification->title; ?></td>
+                                                <td style="width: 30%; display: inline-block;"><?php echo $notification->content; ?></td>
                                                 <td><?php echo $notification->created_date; ?></td>
                                                 <td><?php echo $status_arr[$notification->status]; ?></td>
                                                 <td>
