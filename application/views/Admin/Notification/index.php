@@ -250,7 +250,7 @@
 							<input type="hidden" name="save_noti" value="true" />
 							<div class="card">
 								<div class="card-body" id="notification-content">
-									<input type='hidden' name='type' value='2' />
+									<input type='hidden' name='type' value='3' />
 									<div class="form-group">
 										<label for="title">Title</label>
 										<input type="text" class="form-control required" id="title" name="title" placeholder="Title" required maxlength='50' />
