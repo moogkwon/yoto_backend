@@ -931,7 +931,9 @@ class Api extends CI_Controller
         }
         $sql = 'DELETE FROM `user_firebase_tokens` 
 						WHERE
-					`user_id`=' . (int)$user->id;
+                    `user_id`=' . (int)$user->id . '
+                        OR 
+                    `token`=' . $this->db->escape($token);
         $this->db->query($sql);
         $sql = 'INSERT IGNORE INTO `user_firebase_tokens` SET
 					`token`=' . $this->db->escape($token) . ',
