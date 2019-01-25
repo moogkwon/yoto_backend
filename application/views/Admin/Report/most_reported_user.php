@@ -24,12 +24,12 @@
                                         <thead>
                                             <tr>
 												<th>User ID</th>
+												<th>Username</th>
 												<th>Total</th>
-												<th>Email</th>
-												<th>The person is nude  </th>
-												<th>Person is mean</th>
-												<th>Inappropriate video profile</th>
-												<th>Total</th>
+												<th>Nude</th>
+												<th>Mean</th>
+												<th>Inappropriate</th>
+												<th>Other</th>
 												<th>Action</th>
                                             </tr>
                                         </thead>
@@ -50,7 +50,7 @@
 													$status = 'Block';
 													$class 	= 'btn-reject';
 												}
-												$other = ($report->person_nude+$report->person_mean+$report->inappropriate);
+												$other = $report->total - ($report->person_nude+$report->person_mean+$report->inappropriate);
 												if($report->gender == 'female'){
 													$style = 'color: red';
 												}else{
@@ -62,10 +62,10 @@
 															<a href="<?php echo site_url('Admin/Users/View/'.$report->suspect); ?>" style="<?php echo $style; ?>"><?php echo $report->suspect; ?></a>
 														</td>
 														<td>
-															<?php echo $report->total; ?>
+															<?php echo $report->first_name; ?> <?php echo $report->last_name; ?>
 														</td>
 														<td>
-															<?php echo $report->email; ?>
+															<?php echo $report->total; ?>
 														</td>
 														<td>
 															<?php echo $report->person_nude; ?>
@@ -146,7 +146,7 @@
 	<script>
 		$(document).ready(function(){
 			$('.rdataTable').DataTable( {
-				"order": [[ 0, "desc" ]],
+				"order": [[ 3, "desc" ]],
 				"scrollX": true,
 				"bLengthChange" : false,
 				"bPaginate": false,

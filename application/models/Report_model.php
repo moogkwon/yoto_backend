@@ -47,13 +47,47 @@ class Report_model extends CI_Model {
 		return $result;
 	}
 	public function mostReportedUsers(){
-		$this->db->select("c1.suspect,COUNT(c1.suspect) total,user.email email,user.gender gender,user.blocked blocked,(SELECT count(message) FROM complaints c2 Where c1.suspect  = c2.suspect And c2.message = 'Person is mean') person_mean,(SELECT count(message) FROM complaints c2 Where c1.suspect  = c2.suspect And c2.message = 'Person is nude') person_nude,(SELECT count(message) FROM complaints c2 Where c1.suspect  = c2.suspect And c2.message = 'Inappropriate video profile ')  inappropriate");
-		$this->db->from('complaints c1');
-		$this->db->where('user.blocked',0);
-		$this->db->join('users as user','c1.suspect = user.id','inner');
-		$this->db->group_by('c1.suspect');
-		$query  = $this->db->get();
+		// $this->db->select("
+		// 	c1.suspect,
+		// 	COUNT(c1.suspect) total,
+		// 	user.email email,
+		// 	user.username username,
+		// 	user.gender gender,
+		// 	user.blocked blocked,
+		// 	(SELECT count(message) 
+		// 		FROM complaints c2 
+		// 		Where c1.suspect  = c2.suspect And c2.message = 'Person is mean') person_mean,
+		// 	(SELECT count(message) 
+		// 		FROM complaints c2
+		// 		Where c1.suspect  = c2.suspect And c2.message = 'Person is nude') person_nude,
+		// 	(SELECT count(message)
+		// 		FROM complaints c2
+		// 		Where c1.suspect  = c2.suspect And c2.message = 'Inappropriate video profile ')  inappropriate");
+		// $this->db->from('complaints c1');
+		// $this->db->join('users as user','c1.suspect = user.id','inner');
+		// $this->db->where('user.blocked',"0");
+		// $this->db->group_by('c1.suspect');
+		$query  = $this->db->query('
+			SELECT `c1`.`suspect`,  
+					`user`.`email` `email`, `user`.`first_name` `first_name`, `user`.`last_name` `last_name`, `user`.`gender` `gender`, `user`.`blocked` `blocked`, 
+					COUNT(c1.suspect) total,
+					(SELECT count(message) 
+					FROM complaints c2 
+					Where c1.suspect  = c2.suspect And c2.message LIKE "%mean%") person_mean, 
+					(SELECT count(message) 
+					FROM complaints c2
+					Where c1.suspect  = c2.suspect And c2.message LIKE "%nude%") person_nude, 
+					(SELECT count(message)
+					FROM complaints c2
+					Where c1.suspect  = c2.suspect And c2.message LIKE "%inappropriate%")  inappropriate
+			FROM `complaints` `c1`
+			INNER JOIN `users` as `user` ON `c1`.`suspect` = `user`.`id`
+			WHERE `user`.`blocked` = "0"
+			GROUP BY `c1`.`suspect`
+			ORDER By total DESC
+		');
 		$result = $query->result();
+		// var_dump($this->db->last_query());die;
 		return $result;
 	}
 }

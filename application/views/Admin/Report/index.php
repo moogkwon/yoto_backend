@@ -133,7 +133,7 @@
 	<script>
 		$(document).ready(function(){
 			$('.rdataTable').DataTable( {
-				"order": [[ 0, "desc" ]],
+				"order": [[ 3, "desc" ]],
 				 "scrollX": true
 			} );
 
