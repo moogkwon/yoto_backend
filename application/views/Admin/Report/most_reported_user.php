@@ -146,7 +146,7 @@
 	<script>
 		$(document).ready(function(){
 			$('.rdataTable').DataTable( {
-				"order": [[ 3, "desc" ]],
+				"order": [[ 2, "desc" ]],
 				"scrollX": true,
 				"bLengthChange" : false,
 				"bPaginate": false,
