@@ -206,8 +206,8 @@
 												<td><input type="checkbox" class="form-control checkboxclass" name="selected_id" value="<?php echo $notification->id; ?>" ></td>
                                                 <td><?php echo $notification->id; ?></td>
                                                 <td><?php echo $notification->type_title; ?></td>
-                                                <td><?php echo $notification->title; ?></td>
-                                                <td><?php echo $notification->content; ?></td>
+                                                <td style="width: 30%"><?php echo $notification->title; ?></td>
+                                                <td style="width: 30%"><?php echo $notification->content; ?></td>
                                                 <td><?php echo $notification->created_date; ?></td>
                                                 <td><?php echo $status_arr[$notification->status]; ?></td>
                                                 <td>
@@ -250,17 +250,10 @@
 							<input type="hidden" name="save_noti" value="true" />
 							<div class="card">
 								<div class="card-body" id="notification-content">
-									<div class="form-group">
-										<label for="type">Type</label>
-										<select name="type" id="type" class="form-control">
-											<?php foreach($noti_types as $key=>$noti_type) { ?>
-											<option value="<?php echo $noti_type->id; ?>"><?php echo $noti_type->title; ?></option>
-											<?php } ?>
-										</select>
-									</div>
+									<input type='hidden' name='type' value='2' />
 									<div class="form-group">
 										<label for="title">Title</label>
-										<input type="text" class="form-control required" id="title" name="title" placeholder="Title" required />
+										<input type="text" class="form-control required" id="title" name="title" placeholder="Title" required maxlength='50' />
 									</div>
 									<div class="form-group">
 										<label for="content">Content</label>
