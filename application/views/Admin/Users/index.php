@@ -72,24 +72,40 @@
     <!-- end app-body -->
 	<?php $this->load->view('elements/footer'); ?>
 	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"  aria-hidden="true"
-        style="display: none;" id="myModal">
-	<div class="modal-dialog modal-lg">
-	 <div class="modal-content">
-    <div class="modal-header">
-        <h3 id="myModalLabel">Video Profile</h3>
+        style="display: none;" id="videoModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="videoModalLabel">Video Profile</h3>
+                </div>
+                <div class="modal-body">
+                    <video autoplay controls width="100%" height="500px"  id="myVideo"  onclick="this.paused ? this.play() : this.pause();">
+                        <source src="" type="video/mp4" id="mp4_src">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger waves-effect text-left" data-dismiss="modal" aria-hidden="true" id="btnClose" onclick="onClose()">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-body">
-        <video autoplay controls width="100%" height="500px"  id="myVideo"  onclick="this.paused ? this.play() : this.pause();">
-            <source src="" type="video/mp4" id="mp4_src">
-            Your browser does not support the video tag.
-        </video>
+	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"  aria-hidden="true"
+        style="display: none;" id="photoModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="photoModalLabel">Photo Profile</h3>
+                </div>
+                <div class="modal-body">
+                    <img width="100%" id="photoProfile" src="" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger waves-effect text-left" data-dismiss="modal" aria-hidden="true" id="btnClose2" onclick="onClose()">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-danger waves-effect text-left" data-dismiss="modal" aria-hidden="true" id="btnClose" onclick="onClose()">Close</button>
-    </div>
-    </div>
-    </div>
-</div>
 	<script>
 var ajax_datatable;
 (function(window, document, $, undefined) {
@@ -207,18 +223,27 @@ function deleteUser(user_id){
 		}
 	}
 }
-function onShowModal(videoUrl) {
-	//console.log(videoUrl);
-    document.getElementById("mp4_src").src = videoUrl;
-    document.getElementById("myVideo").load();
-
-    $('#myModal').modal('show');
+function onShowModal(url, isPhoto) {
+    //console.log(url);
+    if (isPhoto) {
+        document.getElementById("photoProfile").src = url;
+        $('#photoModal').modal('show');
+        setTimeout(function() {
+            $(".modal-backdrop").bind("click", function() {
+                $("#btnClose2").trigger("click");
+            })
+        }, 500);
+    } else {
+        document.getElementById("mp4_src").src = url;
+        document.getElementById("myVideo").load();
     
-    setTimeout(function() {
-        $(".modal-backdrop").bind("click", function() {
-            $("#btnClose").trigger("click");
-        })
-    }, 500);
+        $('#videoModal').modal('show');
+        setTimeout(function() {
+            $(".modal-backdrop").bind("click", function() {
+                $("#btnClose").trigger("click");
+            })
+        }, 500);
+    }
 }
 
 function onClose() {

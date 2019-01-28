@@ -199,7 +199,11 @@ $return = shell_exec($cmd); */
                 
             $asa = "onclick='deleteUser(".$id.")'";
             $results [$index]->created_at = $carteddate;
-            $results [$index]->videoshow = '<a href="javascript:void(0);" onclick="onShowModal(\'' . $video_url.'\')" class="show_v"><img src='.$video_thumb.' class="img-fluid1" height="50px"></a><p><a href="javascript:void(0);" onclick="rejectVideo('.$id.');">'.$view_v.'</a></p>';
+            if ($result->photo) {
+                $results [$index]->videoshow = '<a href="javascript:void(0);" onclick="onShowModal(\'' . $video_thumb.'\', true)" class="show_v"><img src='.$video_thumb.' class="img-fluid1" height="50px"></a><p><a href="javascript:void(0);" onclick="rejectVideo('.$id.');">'.$view_v.'</a></p>';
+            } else {
+                $results [$index]->videoshow = '<a href="javascript:void(0);" onclick="onShowModal(\'' . $video_url.'\')" class="show_v"><img src='.$video_thumb.' class="img-fluid1" height="50px"></a><p><a href="javascript:void(0);" onclick="rejectVideo('.$id.');">'.$view_v.'</a></p>';
+            }
             $results [$index]->delete_user = '<a href="javascript:void(0);" '.$asa.'>Delete</a>';
         }
 
