@@ -149,7 +149,7 @@
 		});
 		function changeStatus(thisObj,id, status) {
 			$.ajax({
-				url: "<?php echo base_url(); ?>/Admin/Users/changeStatus/" + id + "/" + status,
+				url: "<?php echo site_url('/Admin/Users/changeStatus/'); ?>" + id + "/" + status,
 				method: "POST",
 				success: function(data) {
 					if(status == '1'){
